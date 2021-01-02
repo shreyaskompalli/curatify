@@ -130,7 +130,7 @@ app.get('/create', function(req, res) {
   };
 
   // use the access token to access the Spotify Web API
-  request.get(options, function(error, response, body) {    // Error handling 
+  request.get(options, function(error, response, body) {    // TODO: Error handling 
     var i;
     let history = [];
     for (i = 0; i < body.items.length; i++) {
@@ -239,10 +239,13 @@ function getRecommendations(history, access_token, res) {
       request.get(rec_options, function(error, response, rec_body) {
         if (!error && response.statusCode === 200) {
           createPlaylist(rec_body.tracks, access_token, res);
+          res.send({
+            'track_list': rec_body.tracks
+          });
         } else {
           
 
-          // ERROR HANDLING
+          console.log("failure");
 
 
         }
@@ -333,3 +336,4 @@ function mapMaxValue(map) {
 
 console.log('Listening on 8888');
 app.listen(8888);
+

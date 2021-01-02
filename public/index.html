@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
-  <head>
+  <head lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <title>Curatify</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <style type="text/css">
       #login, #loggedin {
         display: none;
@@ -13,8 +15,31 @@
         white-space: nowrap;
         width: 500px;
       }
-      h1, p {
+      h1, #login p, .jumbotron p {
         text-align: center;
+      }
+      .track-block {
+        background: rgba(245, 197, 126, 0.685);
+        padding-top: 5px;
+        padding-left: 20px;
+      }
+
+      .track-block h2, .track-block p {
+        color: rgb(196, 122, 13);
+      }
+
+      .track-list {
+        /* padding: 20px; */
+        max-height: 200px;
+        overflow: auto;
+      }
+      .jumbotron {
+        /* font-family: Tahoma, sans-serif; */
+        font-size: xx-large;
+        font-weight: 500;
+        background-color: rgba(43, 226, 250, 0.699);
+        color: rgba(60, 152, 228, 0.815);
+        background-image: var(--bs-gradient);
       }
     </style>
   </head>
@@ -22,72 +47,84 @@
   <body>
     <div class="container">
       <div id="login">
-        <h1>Welcome to the Spotify Music Recommender</h1>
+        <h1 class="login-title">Welcome to Curatify</h1>
         <p>This is a web-app that allows you to create custom playlists based on various characteristics. Log in to get started!</p>
         <div class="col text-center">
-          <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+          <a href="/login" class="btn btn-primary btn-lg">Sign in with Spotify</a>
         </div>
-      </div>
-      <div id="loggedin">
-        <div id="user-profile">
-        </div>
-        <div id="info">
-        </div>
-        <div id="oauth">
-        </div>
-        <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
-        <button class="btn btn-default" id="create-playlist">Create a new playlist!</button>
       </div>
     </div>
 
-    <script id="user-profile-template" type="text/x-handlebars-template">
-      <h1>Logged in as {{display_name}}</h1>
-      <div class="media">
-        <div class="pull-left">
-          <img class="media-object" width="150" src="{{images.0.url}}" />
+    <div id="loggedin">
+      <div class="jumbotron">
+        <h1>Curatify</h1>      
+        <p>This is a web-app that allows you to create custom playlists based on various characteristics.</p>
+      </div>
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-sm-6">
+            <div id="recently-played">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div id="new-tracks">
+            </div>
+          </div>
         </div>
-        <div class="media-body">
-          <dl class="dl-horizontal">
-            <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-            <dt>Id</dt><dd>{{id}}</dd>
-            <dt>Email</dt><dd>{{email}}</dd>
-            <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-            <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-            <dt>Country</dt><dd>{{country}}</dd>
-          </dl>
+        <!-- <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button> -->
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="danceability" class="form-label">Danceability</label>
+            <input type="range" class="form-range" id="danceability">
+          </div>
+          <div class="col-sm-6">
+            <label for="energy" class="form-label">Energy</label>
+            <input type="range" class="form-range" id="energy">
+          </div>
         </div>
+        <button class="btn btn-default" id="create-playlist">Create a new playlist!</button>
+      </div>
+    </div>
+    
+
+    <script id="rp-template" type="text/x-handlebars-template">
+      <div class="track-block">
+        <h2>Recently Played Songs</h2>
+        <p>The tracks that you've been listening to lately.</p>
+        <dl class="track-list">
+          {{#each items}}
+            <dt>{{track.name}}</dt>
+            <dd><a href="{{track.external_urls.spotify}}">
+              {{track.external_urls.spotify}}
+            </a></dd>
+          {{/each}}
+        </dl>
+      </div>
+    </script>
+      
+
+    <script id="nt-template" type="text/x-handlebars-template">
+      <div class="track-block">
+        <h2>Your New Songs</h2>
+        <dl class="track-list">
+          {{#each tracks}}
+            <dt>{{name}}</dt>
+            <dd><a href="{{external_urls.spotify}}">
+              {{external_urls.spotify}}
+            </a></dd>
+          {{/each}}
+        </dl>
       </div>
     </script>
 
-    <script id="info-template" type="text/x-handlebars-template">
-      <div class="media">
-        <div class="media-body">
-          <h2>Recently Played Info</h2>
-          <dl class="dl-horizontal">
-            {{#each items}}
-              <dt>{{track.name}}</dt>
-              <!-- <dd>
-                {{#each track.artists}}
-                  {{name}}
-                {{/each}}
-              </dd> -->
-              <dd><a href="{{track.external_urls.spotify}}">
-                {{track.external_urls.spotify}}
-              </a></dd>
-            {{/each}}
-          </dl>
-        </div>
-      </div>
-    </script>
-
-    <script id="oauth-template" type="text/x-handlebars-template">
+    <!-- <script id="oauth-template" type="text/x-handlebars-template">
       <h2>oAuth info</h2>
       <dl class="dl-horizontal">
         <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
         <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
       </dl>
-    </script>
+    </script> -->
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -108,17 +145,21 @@
           return hashParams;
         }
 
-        var userProfileSource = document.getElementById('user-profile-template').innerHTML,
-            userProfileTemplate = Handlebars.compile(userProfileSource),
-            userProfilePlaceholder = document.getElementById('user-profile');
+        // var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+        //     userProfileTemplate = Handlebars.compile(userProfileSource),
+        //     userProfilePlaceholder = document.getElementById('user-profile');
 
-        var oauthSource = document.getElementById('oauth-template').innerHTML,
-            oauthTemplate = Handlebars.compile(oauthSource),
-            oauthPlaceholder = document.getElementById('oauth');
+        // var oauthSource = document.getElementById('oauth-template').innerHTML,
+        //     oauthTemplate = Handlebars.compile(oauthSource),
+        //     oauthPlaceholder = document.getElementById('oauth');
 
-        var infoSource = document.getElementById('info-template').innerHTML,
-            infoTemplate = Handlebars.compile(infoSource),
-            infoPlaceholder = document.getElementById('info');
+        var rpSource = document.getElementById('rp-template').innerHTML,
+            rpTemplate = Handlebars.compile(rpSource),
+            rpPlaceholder = document.getElementById('recently-played');
+        
+        var ntSource = document.getElementById('nt-template').innerHTML,
+            ntTemplate = Handlebars.compile(ntSource),
+            ntPlaceholder = document.getElementById('new-tracks');
 
         var params = getHashParams();
 
@@ -131,10 +172,10 @@
         } else {
           if (access_token) {
             // render oauth info
-            oauthPlaceholder.innerHTML = oauthTemplate({
-              access_token: access_token,
-              refresh_token: refresh_token
-            });
+            // oauthPlaceholder.innerHTML = oauthTemplate({
+            //   access_token: access_token,
+            //   refresh_token: refresh_token
+            // });
 
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/player/recently-played',
@@ -142,7 +183,7 @@
                   'Authorization': 'Bearer ' + access_token
                 },
                 success: function(response) {
-                  infoPlaceholder.innerHTML = infoTemplate(response);
+                  rpPlaceholder.innerHTML = rpTemplate(response);
 
                   $('#login').hide();
                   $('#loggedin').show();
@@ -154,20 +195,20 @@
               $('#loggedin').hide();
           }
 
-          document.getElementById('obtain-new-token').addEventListener('click', function() {
-            $.ajax({
-              url: '/refresh_token',
-              data: {
-                'refresh_token': refresh_token
-              }
-            }).done(function(data) {
-              access_token = data.access_token;
-              oauthPlaceholder.innerHTML = oauthTemplate({
-                access_token: access_token,
-                refresh_token: refresh_token
-              });
-            });
-          }, false);
+          // document.getElementById('obtain-new-token').addEventListener('click', function() {
+          //   $.ajax({
+          //     url: '/refresh_token',
+          //     data: {
+          //       'refresh_token': refresh_token
+          //     }
+          //   }).done(function(data) {
+          //     access_token = data.access_token;
+          //     oauthPlaceholder.innerHTML = oauthTemplate({
+          //       access_token: access_token,
+          //       refresh_token: refresh_token
+          //     });
+          //   });
+          // }, false);
 
           document.getElementById('create-playlist').addEventListener('click', function() {
             $.ajax({
@@ -175,8 +216,12 @@
               data: {
                 'access_token': access_token
               }
+            }).done(function(data) {
+              ntPlaceholder.innerHTML = ntTemplate({
+                tracks: data.track_list
+              });
             });
-          }, false);
+          }, false);      /// Fix .done function (in notes)
         }
       })();
     </script>
