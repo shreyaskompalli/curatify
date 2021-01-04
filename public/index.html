@@ -22,26 +22,31 @@
         background: rgba(245, 197, 126, 0.685);
         padding-top: 5px;
         padding-left: 20px;
+        min-height: 300px;
       }
 
       .track-block h2, .track-block p {
         color: rgb(196, 122, 13);
+        
       }
 
       .track-list {
         /* padding: 20px; */
+        
         max-height: 200px;
         overflow: auto;
       }
       .jumbotron {
         /* font-family: Tahoma, sans-serif; */
-        font-size: xx-large;
+        font-size: x-large;
         font-weight: 500;
         background-color: rgba(43, 226, 250, 0.699);
         color: rgba(60, 152, 228, 0.815);
         background-image: var(--bs-gradient);
+        height: 250px;
       }
     </style>
+    <script></script>
   </head>
 
   <body>
@@ -61,61 +66,69 @@
         <p>This is a web-app that allows you to create custom playlists based on various characteristics.</p>
       </div>
       <div class="container-fluid">
-        
         <div class="row">
           <div class="col-sm-6">
-            <div id="recently-played">
+            <div class="track-block">
+              <h2>Your Recently Played Songs</h2>
+              <p>The tracks that you've been listening to lately.</p>
+              <div id="recently-played">
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
-            <div id="new-tracks">
+            <div class="track-block">
+              <h2>A New Playlist</h2>
+              <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
+              <div id="new-tracks">
+              </div>
             </div>
           </div>
         </div>
         <!-- <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button> -->
-        <div class="row">
-          <div class="col-sm-6">
-            <label for="danceability" class="form-label">Danceability</label>
-            <input type="range" class="form-range" id="danceability">
-          </div>
-          <div class="col-sm-6">
-            <label for="energy" class="form-label">Energy</label>
-            <input type="range" class="form-range" id="energy">
-          </div>
-        </div>
+        <button class="btn btn-default" id="generate-recs">Generate tracks!</button>
         <button class="btn btn-default" id="create-playlist">Create a new playlist!</button>
+        <form>
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="danceability" class="form-label">Danceability</label>
+              <input type="range" class="form-range" id="danceability">
+            </div>
+            <div class="col-sm-6">
+              <label for="energy" class="form-label">Energy</label>
+              <input type="range" class="form-range" id="energy">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary" id="slider-submit">Create Playlist</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
     
 
     <script id="rp-template" type="text/x-handlebars-template">
-      <div class="track-block">
-        <h2>Recently Played Songs</h2>
-        <p>The tracks that you've been listening to lately.</p>
-        <dl class="track-list">
-          {{#each items}}
-            <dt>{{track.name}}</dt>
-            <dd><a href="{{track.external_urls.spotify}}">
-              {{track.external_urls.spotify}}
-            </a></dd>
-          {{/each}}
-        </dl>
-      </div>
+      <dl class="track-list">
+        {{#each items}}
+          <dt>{{track.name}}</dt>
+          <dd><a href="{{track.external_urls.spotify}}">
+            {{track.external_urls.spotify}}
+          </a></dd>
+        {{/each}}
+      </dl>
     </script>
       
 
     <script id="nt-template" type="text/x-handlebars-template">
-      <div class="track-block">
-        <h2>Your New Songs</h2>
-        <dl class="track-list">
-          {{#each tracks}}
-            <dt>{{name}}</dt>
-            <dd><a href="{{external_urls.spotify}}">
-              {{external_urls.spotify}}
-            </a></dd>
-          {{/each}}
-        </dl>
-      </div>
+      <dl class="track-list">
+        {{#each tracks}}
+          <dt>{{name}}</dt>
+          <dd><a href="{{external_urls.spotify}}">
+            {{external_urls.spotify}}
+          </a></dd>
+        {{/each}}
+      </dl>
     </script>
 
     <!-- <script id="oauth-template" type="text/x-handlebars-template">
@@ -145,6 +158,8 @@
           return hashParams;
         }
 
+        
+
         // var userProfileSource = document.getElementById('user-profile-template').innerHTML,
         //     userProfileTemplate = Handlebars.compile(userProfileSource),
         //     userProfilePlaceholder = document.getElementById('user-profile');
@@ -166,6 +181,8 @@
         var access_token = params.access_token,
             refresh_token = params.refresh_token,
             error = params.error;
+          
+        var recs_list;
 
         if (error) {
           alert('There was an error during the authentication');
@@ -210,9 +227,9 @@
           //   });
           // }, false);
 
-          document.getElementById('create-playlist').addEventListener('click', function() {
+          document.getElementById('generate-recs').addEventListener('click', function() {
             $.ajax({
-              url: '/create',
+              url: '/generate',
               data: {
                 'access_token': access_token
               }
@@ -220,8 +237,34 @@
               ntPlaceholder.innerHTML = ntTemplate({
                 tracks: data.track_list
               });
+              recs_list = data.track_list;
             });
-          }, false);      /// Fix .done function (in notes)
+          }, false);
+
+          document.getElementById('slider-submit').addEventListener('click', function() {
+            console.log(document.getElementById('danceability').value);
+            $.ajax({
+              url: '/sliders',
+              data: {
+                'access_token': access_token,
+                'danceability': document.getElementById('danceability').value,
+                'energy': document.getElementById('energy').value
+              }
+            });
+          }, false);
+
+          document.getElementById('create-playlist').addEventListener('click', function() {
+            if (recs_list) {
+              $.ajax({
+                url: '/create',
+                data: {
+                  'access_token': access_token,
+                }
+              });
+            } else {
+              alert("You haven't generated any tracks yet!");
+            }
+          }, false);
         }
       })();
     </script>

@@ -10,7 +10,7 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 const { access } = require('fs');
-var auth_code = '';
+var recs_list;
 
 var spotifyApi = new SpotifyWebApi({
   clientId: 'f785c94c9cb64ee6954f436f39b0ee6c',
@@ -120,8 +120,7 @@ app.get('/callback', function(req, res) {
   });
 });
 
-app.get('/create', function(req, res) {
-  console.log("hello");
+app.get('/generate', function(req, res) {
   var access_token = req.query.access_token;
   var options = {
     url: 'https://api.spotify.com/v1/me/player/recently-played',
@@ -138,6 +137,15 @@ app.get('/create', function(req, res) {
     }
     getRecommendations(history, access_token, res);
   });
+});
+
+app.get('/create', function(req, res) {
+  if (recs_list) {
+    createPlaylist(recs_list, req.query.access_token, res);
+  } else {
+      // Error Handling
+      console.log("no");
+  }
 });
 
 app.get('/refresh_token', function(req, res) {
@@ -238,7 +246,7 @@ function getRecommendations(history, access_token, res) {
       };
       request.get(rec_options, function(error, response, rec_body) {
         if (!error && response.statusCode === 200) {
-          createPlaylist(rec_body.tracks, access_token, res);
+          recs_list = rec_body.tracks;
           res.send({
             'track_list': rec_body.tracks
           });
@@ -261,6 +269,7 @@ function getRecommendations(history, access_token, res) {
 }
 
 function createPlaylist(tracks, access_token, res) {
+  console.log("hello");
   var user_id;
   // var uris = "";
   // for (var i = 0; i < tracks.length; i++) {
@@ -283,7 +292,7 @@ function createPlaylist(tracks, access_token, res) {
           'Content-Type': 'application/json'
         },
         body: {
-          "name": "Recommendations Playlist",
+          "name": "Curatify Playlist",
           "description": "A playlist created based on your recently played tracks.",
         },
         json: true
@@ -305,12 +314,12 @@ function createPlaylist(tracks, access_token, res) {
             if (!error && response.statusCode === 201) {
               console.log(body);
             } else {
-              console.log('failure');
+              console.log('failure1');
             }
           });
         } else {
           
-
+          console.log('failure2');
           // Error Handling
 
 
@@ -318,7 +327,9 @@ function createPlaylist(tracks, access_token, res) {
       });
     } else {
 
-
+      console.log('failure3');
+      console.log(response.statusCode);
+      
       // Error Handling
 
 
