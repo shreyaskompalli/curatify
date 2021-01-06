@@ -10,7 +10,7 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 const { access } = require('fs');
-var recs_list;
+var recents_list, sliders_list;
 
 var spotifyApi = new SpotifyWebApi({
   clientId: 'f785c94c9cb64ee6954f436f39b0ee6c',
@@ -60,7 +60,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-read-recently-played playlist-modify-public';
+  var scope = 'user-read-private user-read-email user-read-recently-played playlist-modify-public user-top-read';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -135,17 +135,45 @@ app.get('/generate', function(req, res) {
     for (i = 0; i < body.items.length; i++) {
       history.push(body.items[i].track);
     }
-    getRecommendations(history, access_token, res);
+    buildRecents(history, access_token, res);
   });
 });
 
 app.get('/create', function(req, res) {
-  if (recs_list) {
-    createPlaylist(recs_list, req.query.access_token, res);
+  if (req.query.type === 'recents') {
+    if (recents_list) {
+      createPlaylist(recents_list, req.query.access_token, res);
+    } else {
+      // Error handling, alert 
+    }
+  } else if (req.query.type === 'sliders') {
+    if (sliders_list) {
+      createPlaylist(recents_list, req.query.access_token, res);
+    } else {
+      // Error handling, alert 
+    }
   } else {
       // Error Handling
-      console.log("no");
+      console.log("creation failure");
   }
+});
+
+app.get('/sliders', function(req, res) {
+  var rec_url = 'https://api.spotify.com/v1/recommendations?'
+    + querystring.stringify({
+      seed_artists: req.query.seed_artists,
+      limit: 50,
+      target_danceability: req.query.danceability/100,
+      target_energy: req.query.energy/100,
+      // target_loudness: (loudness/num_tracks).toPrecision(3),
+      // target_speechiness: (speechiness/num_tracks).toPrecision(3),
+      // target_acousticness: (acousticness/num_tracks).toPrecision(3),
+      // target_instrumentalness: (instrumentalness/num_tracks).toPrecision(3),
+      // target_liveliness: (liveliness/num_tracks).toPrecision(3),
+      // target_valence: (valence/num_tracks).toPrecision(3),
+      // target_tempo: (tempo/num_tracks).toPrecision(3)
+    });
+    getRecommendations(rec_url, req.query.access_token, res, 'sliders');
 });
 
 app.get('/refresh_token', function(req, res) {
@@ -173,7 +201,7 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-function getRecommendations(history, access_token, res) {
+function buildRecents(history, access_token, res) {
   const num_tracks = history.length;
   var ids = "", seed_artists = "";
   var danceability = 0, energy = 0, loudness = 0, speechiness = 0, acousticness = 0, 
@@ -238,26 +266,7 @@ function getRecommendations(history, access_token, res) {
         target_valence: (valence/num_tracks).toPrecision(3),
         target_tempo: (tempo/num_tracks).toPrecision(3)
       });
-
-      let rec_options = {
-        url: rec_url,
-        headers: { 'Authorization': 'Bearer ' + access_token },
-        json: true
-      };
-      request.get(rec_options, function(error, response, rec_body) {
-        if (!error && response.statusCode === 200) {
-          recs_list = rec_body.tracks;
-          res.send({
-            'track_list': rec_body.tracks
-          });
-        } else {
-          
-
-          console.log("failure");
-
-
-        }
-      });
+      getRecommendations(rec_url, access_token, res, 'recents');
     } else {
 
 
@@ -268,8 +277,31 @@ function getRecommendations(history, access_token, res) {
   });
 }
 
+function getRecommendations(url, access_token, res, rec_type) {
+  let rec_options = {
+    url: url,
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  };
+  request.get(rec_options, function(error, response, rec_body) {
+    if (!error && response.statusCode === 200) {
+      if (rec_type === 'recents') {
+        recents_list = rec_body.tracks;
+      } else if (rec_type === 'sliders') {
+        sliders_list = rec_body.tracks;
+      }
+      res.send({
+        'track_list': rec_body.tracks
+      });
+    } else {
+      console.log("recommendation failure");
+      console.log(response.statusCode);
+      // Error handling
+    }
+  });
+}
+
 function createPlaylist(tracks, access_token, res) {
-  console.log("hello");
   var user_id;
   // var uris = "";
   // for (var i = 0; i < tracks.length; i++) {
@@ -315,6 +347,7 @@ function createPlaylist(tracks, access_token, res) {
               console.log(body);
             } else {
               console.log('failure1');
+              // Error handling
             }
           });
         } else {
