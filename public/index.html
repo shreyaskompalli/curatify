@@ -46,6 +46,17 @@
         color: rgb(215, 150, 245);
       }
 
+      .slider-block {
+        background: rgb(131, 11, 11);
+        padding-top: 5px;
+        padding-left: 20px;
+        min-height: 300px;
+      }
+
+      .slider-block h2, .slider-block p {
+        color: rgb(236, 92, 92);
+      }
+
       .name-block {
         background: rgba(138, 241, 69, 0.685);
         padding-top: 5px;
@@ -69,8 +80,8 @@
         /* background-color: rgba(43, 226, 250, 0.699); */
         background-color: rgb(8, 83, 126);
         color: rgba(75, 233, 245, 0.815);
-        padding: 30px;
-        font-size: 70px;
+        padding: 20px;
+        font-size: 60px;
         font-weight: bold;
       }
 
@@ -85,6 +96,10 @@
         padding-left: 0;
       }
 
+      label {
+        font-weight: bold;
+      }
+
       .top-item {
         font-weight: bold;
         font-size: 40px;
@@ -94,16 +109,6 @@
         font-weight: bold;
         font-size: 20px;
       }
-
-      /* .jumbotron {
-        font-family: Tahoma, sans-serif;
-        font-size: x-large;
-        font-weight: 500;
-        background-color: rgba(43, 226, 250, 0.699);
-        color: rgba(60, 152, 228, 0.815);
-        background-image: var(--bs-gradient);
-        height: 250px;
-      } */
     </style>
     <script></script>
   </head>
@@ -129,7 +134,7 @@
         <!-- <p>This is a web-app that allows you to create custom playlists based on various characteristics.</p> -->
       <!-- </div> -->
       <div class="container-fluid">
-        <div class="row mt-3">
+        <div class="row my-3">
           <div class="col-sm-7">
             <div class="white-block">
               <div class="rp-block">
@@ -143,13 +148,14 @@
           <div class="col-sm-5">
             <div class="name-block circle">
               <h2>Your top artists</h2>
+              <p>The artists you've had on repeat for the past month.</p>
               <div id="top-artists">
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row my-3">
           <div class="col-sm-5">
             <div class="row">
               <div class="col-sm-12">
@@ -174,22 +180,49 @@
           </div>
         </div>
 
-        <form>
-          <div class="row">
-            <div class="col-sm-6 ml-3">
-              <div class="form-group">
-                <label for="danceability">Danceability</label>
-                <input type="range" class="form-control-range" id="danceability">
-                <label for="energy">Energy</label>
-                <input type="range" class="form-control-range" id="energy">
-                <button type="submit" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate tracks!</button>
-                <button type="submit" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Create Playlist!</button>
+       
+        <div class="row my-3">
+          <div class="col-sm-6">
+            <div class="slider-block">
+              <h2>Sliders Playlist</h2>
+              <p>Some new tracks that you might enjoy, based on your chosen attributes.</p>
+              <div id="slider-tracks">
               </div>
             </div>
-            <div class="col-sm-6">
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <form>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <label for="danceability">Danceability</label>
+                    <input type="range" class="form-control-range" id="danceability">
+                    <small class="form-text text-muted">In a groovy mood?</small>
+                    <label for="valence">Valence</label>
+                    <input type="range" class="form-control-range" id="valence">
+                    <small class="form-text text-muted">Slide up for happy tunes, or down for a somber vibe.</small>
+                    <label for="instrumentalness">Instrumentalness</label>
+                    <input type="range" class="form-control-range" id="instrumentalness">
+                    <small class="form-text text-muted">Do you prefer singing, or just an instrumental melody?</small>
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="energy">Energy</label>
+                    <input type="range" class="form-control-range" id="energy">
+                    <small class="form-text text-muted">How intense are you feeling?</small>
+                    <label for="loudness">Loudness</label>
+                    <input type="range" class="form-control-range" id="loudness">
+                    <small class="form-text text-muted">This one's pretty straightforward.</small>
+                    <label for="acousticness">Acousticness</label>
+                    <input type="range" class="form-control-range" id="acousticness">
+                    <small class="form-text text-muted">Electric guitars or all-natural sounds?</small>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate tracks!</button>
+                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Create Playlist!</button>
+              </form>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>  
 
@@ -217,15 +250,25 @@
     </script>
 
     <script id="top-artists-template" type="text/x-handlebars-template">
-      <ul class="items-list">
-        {{#each items}}
-          {{#if @index}}
-            <li class="secondary-item">{{name}}</li>
-          {{else}}
-            <li class="top-item">{{name}}</li>
-          {{/if}}
-        {{/each}}
-      </dl>
+      <div class="row">
+        <div class="col-sm-6">
+          <ul class="items-list">
+            {{#each items}}
+              {{#if @index}}
+                <li class="secondary-item">{{name}}</li>
+              {{else}}
+                <li class="top-item">{{name}}</li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col-sm-6">
+            <div>
+              <img class="media-object" width="200" height="200" src="{{items.0.images.0.url}}">
+            </div>
+        </div>
+      </div>
+      
     </script>
 
     <!-- <script id="oauth-template" type="text/x-handlebars-template">
@@ -276,6 +319,10 @@
         var taSource = document.getElementById('top-artists-template').innerHTML,
             taTemplate = Handlebars.compile(taSource),
             taPlaceholder = document.getElementById('top-artists');
+          
+        var sliderSource = document.getElementById('nt-template').innerHTML,
+            sliderTemplate = Handlebars.compile(sliderSource),
+            sliderPlaceholder = document.getElementById('slider-tracks');
 
         var params = getHashParams();
 
@@ -323,6 +370,7 @@
                     top_artists += artist.id + ",";
                   }
                   top_artists = top_artists.slice(0, top_artists.length - 1);
+                  console.log(response.items[0].images[0].url);
                 }
             });
           } else {
@@ -346,6 +394,7 @@
           }, false);
 
           document.getElementById('sliders-generate').addEventListener('click', function() {
+            
             $.ajax({
               url: '/sliders',
               data: {
@@ -355,7 +404,9 @@
                 'energy': document.getElementById('energy').value
               }
             }).done(function(data) {
-              console.log(data);
+              sliderPlaceholder.innerHTML = sliderTemplate({
+                tracks: data.track_list
+              });
             });
           }, false);
 

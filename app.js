@@ -290,6 +290,8 @@ function getRecommendations(url, access_token, res, rec_type) {
       } else if (rec_type === 'sliders') {
         sliders_list = rec_body.tracks;
       }
+      //console.log(rec_body.tracks);
+      console.log("hello");
       res.send({
         'track_list': rec_body.tracks
       });
