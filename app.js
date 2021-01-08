@@ -165,12 +165,12 @@ app.get('/sliders', function(req, res) {
       limit: 50,
       target_danceability: req.query.danceability/100,
       target_energy: req.query.energy/100,
-      // target_loudness: (loudness/num_tracks).toPrecision(3),
+      target_loudness: req.query.loudness/100,
       // target_speechiness: (speechiness/num_tracks).toPrecision(3),
-      // target_acousticness: (acousticness/num_tracks).toPrecision(3),
-      // target_instrumentalness: (instrumentalness/num_tracks).toPrecision(3),
+      target_acousticness: req.query.acousticness/100,
+      target_instrumentalness: req.query.instrumentalness/100,
       // target_liveliness: (liveliness/num_tracks).toPrecision(3),
-      // target_valence: (valence/num_tracks).toPrecision(3),
+      target_valence: req.query.valence/100,
       // target_tempo: (tempo/num_tracks).toPrecision(3)
     });
     getRecommendations(rec_url, req.query.access_token, res, 'sliders');

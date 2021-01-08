@@ -23,11 +23,14 @@
         background-color: rgba(43, 226, 250, 0.493);
       } */
 
-      .rp-block {
-        background: rgb(196, 122, 13);
+      .rp-block, .nt-block, .slider-block, .name-block {
         padding-top: 5px;
         padding-left: 20px;
-        min-height: 300px;
+        min-height: 400px;
+      }
+
+      .rp-block {
+        background: rgb(196, 122, 13);
       }
 
       .rp-block h2, .rp-block p {
@@ -37,9 +40,6 @@
 
       .nt-block {
         background: rgb(92, 13, 196);
-        padding-top: 5px;
-        padding-left: 20px;
-        min-height: 300px;
       }
 
       .nt-block h2, .nt-block p {
@@ -48,9 +48,6 @@
 
       .slider-block {
         background: rgb(131, 11, 11);
-        padding-top: 5px;
-        padding-left: 20px;
-        min-height: 300px;
       }
 
       .slider-block h2, .slider-block p {
@@ -59,9 +56,6 @@
 
       .name-block {
         background: rgba(138, 241, 69, 0.685);
-        padding-top: 5px;
-        padding-left: 20px;
-        min-height: 300px;
       }
 
       .name-block h2, .name-block p {
@@ -87,7 +81,7 @@
 
       .items-list {
         /* padding: 20px; */
-        max-height: 200px;
+        max-height: 300px;
         overflow: auto;
       }
 
@@ -129,101 +123,105 @@
       <header class="sticky-top">
         Curatify
       </header>
-      <!-- <div class="jumbotron"> -->
-      
-        <!-- <p>This is a web-app that allows you to create custom playlists based on various characteristics.</p> -->
-      <!-- </div> -->
-      <div class="container-fluid">
-        <div class="row my-3">
-          <div class="col-sm-7">
-            <div class="white-block">
-              <div class="rp-block">
-                <h2>Your Recently Played Songs</h2>
-                <p>The tracks that you've been listening to lately.</p>
-                <div id="recently-played">
-                </div>
-              </div>
-            </div>
+      <div>
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+          <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+          <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">Home</a>
+            <a class="nav-item nav-link" href="#recents">Recently Played</a>
+            <a class="nav-item nav-link" href="#sliders">Sliders</a>
+            <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
           </div>
-          <div class="col-sm-5">
-            <div class="name-block circle">
-              <h2>Your top artists</h2>
-              <p>The artists you've had on repeat for the past month.</p>
-              <div id="top-artists">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row my-3">
-          <div class="col-sm-5">
-            <div class="row">
-              <div class="col-sm-12">
-                <button type="button" class="btn btn-outline-secondary btn-lg btn-block m-3" id="recents-generate">Generate tracks!</button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <button type="button" class="btn btn-outline-secondary btn-lg btn-block m-3" id="recents-create">Add these tracks to a playlist!</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-7">
-            <div class="white-block">
-              <div class="nt-block">
-                <h2>A New Playlist</h2>
-                <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
-                <div id="new-tracks">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-       
-        <div class="row my-3">
-          <div class="col-sm-6">
-            <div class="slider-block">
-              <h2>Sliders Playlist</h2>
-              <p>Some new tracks that you might enjoy, based on your chosen attributes.</p>
-              <div id="slider-tracks">
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <form>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <label for="danceability">Danceability</label>
-                    <input type="range" class="form-control-range" id="danceability">
-                    <small class="form-text text-muted">In a groovy mood?</small>
-                    <label for="valence">Valence</label>
-                    <input type="range" class="form-control-range" id="valence">
-                    <small class="form-text text-muted">Slide up for happy tunes, or down for a somber vibe.</small>
-                    <label for="instrumentalness">Instrumentalness</label>
-                    <input type="range" class="form-control-range" id="instrumentalness">
-                    <small class="form-text text-muted">Do you prefer singing, or just an instrumental melody?</small>
-                  </div>
-                  <div class="col-sm-6">
-                    <label for="energy">Energy</label>
-                    <input type="range" class="form-control-range" id="energy">
-                    <small class="form-text text-muted">How intense are you feeling?</small>
-                    <label for="loudness">Loudness</label>
-                    <input type="range" class="form-control-range" id="loudness">
-                    <small class="form-text text-muted">This one's pretty straightforward.</small>
-                    <label for="acousticness">Acousticness</label>
-                    <input type="range" class="form-control-range" id="acousticness">
-                    <small class="form-text text-muted">Electric guitars or all-natural sounds?</small>
+        </nav>
+        <div class="container-fluid">
+          <div class="row my-3" id="recents">
+            <div class="col-sm-7">
+              <div class="white-block">
+                <div class="rp-block">
+                  <h2>Your Recently Played Songs</h2>
+                  <p>The tracks that you've been listening to lately.</p>
+                  <div id="recently-played">
                   </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate tracks!</button>
-                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Create Playlist!</button>
-              </form>
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="name-block">
+                <h2>Your top artists</h2>
+                <p>The artists you've had on repeat for the past month.</p>
+                <div id="top-artists">
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row my-3">
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="col-sm-12">
+                  <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-generate">Generate tracks!</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-create">Add these tracks to a new playlist!</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-7">
+              <div class="white-block">
+                <div class="nt-block">
+                  <h2>A New Playlist</h2>
+                  <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
+                  <div id="new-tracks">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+         
+          <div class="row my-" id="sliders">
+            <div class="col-sm-6">
+              <div class="slider-block">
+                <h2>Sliders Playlist</h2>
+                <p>Some new tracks that you might enjoy, based on your chosen attributes.</p>
+                <div id="slider-tracks">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <form>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <label for="danceability">Danceability</label>
+                      <input type="range" class="form-control-range" id="danceability">
+                      <small class="form-text text-muted">In a groovy mood?</small>
+                      <label for="valence">Valence</label>
+                      <input type="range" class="form-control-range" id="valence">
+                      <small class="form-text text-muted">Slide up for happy tunes, or down for a somber vibe.</small>
+                      <label for="instrumentalness">Instrumentalness</label>
+                      <input type="range" class="form-control-range" id="instrumentalness">
+                      <small class="form-text text-muted">Do you prefer singing, or just an instrumental melody?</small>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="energy">Energy</label>
+                      <input type="range" class="form-control-range" id="energy">
+                      <small class="form-text text-muted">How intense are you feeling?</small>
+                      <label for="loudness">Loudness</label>
+                      <input type="range" class="form-control-range" id="loudness">
+                      <small class="form-text text-muted">This one's pretty straightforward.</small>
+                      <label for="acousticness">Acousticness</label>
+                      <input type="range" class="form-control-range" id="acousticness">
+                      <small class="form-text text-muted">Electric guitars or all-natural sounds?</small>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate tracks!</button>
+                  <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Create Playlist!</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
     </div>  
 
     <script id="rp-template" type="text/x-handlebars-template">
@@ -268,7 +266,6 @@
             </div>
         </div>
       </div>
-      
     </script>
 
     <!-- <script id="oauth-template" type="text/x-handlebars-template">
@@ -401,7 +398,11 @@
                 'access_token': access_token,
                 'seed_artists': top_artists,
                 'danceability': document.getElementById('danceability').value,
-                'energy': document.getElementById('energy').value
+                'energy': document.getElementById('energy').value,
+                'acousticness': document.getElementById('acousticness').value,
+                'loudness': document.getElementById('loudness').value,
+                'instrumentalness': document.getElementById('instrumentalness').value,
+                'valence': document.getElementById('valence').value,
               }
             }).done(function(data) {
               sliderPlaceholder.innerHTML = sliderTemplate({
