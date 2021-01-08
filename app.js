@@ -372,6 +372,6 @@ function mapMaxValue(map) {
   return maxKey;
 }
 
+app.set('port', process.env.PORT || 3000);
 console.log('Listening on 8888');
-app.listen(8888);
-
+app.listen(app.get('port'));
