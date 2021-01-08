@@ -1,0 +1,97 @@
+#login, #loggedin {
+    display: none;
+}
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
+}
+h1, #login p, .jumbotron p {
+    text-align: center;
+}
+
+/* #loggedin {
+    background-color: rgba(43, 226, 250, 0.493);
+} */
+
+.rp-block, .nt-block, .slider-block, .name-block {
+    padding-top: 5px;
+    padding-left: 20px;
+    min-height: 400px;
+}
+
+.rp-block {
+    background: rgb(196, 122, 13);
+}
+
+.rp-block h2, .rp-block p {
+    color: rgb(250, 204, 135);
+    
+}
+
+.nt-block {
+    background: rgb(92, 13, 196);
+}
+
+.nt-block h2, .nt-block p {
+    color: rgb(215, 150, 245);
+}
+
+.slider-block {
+    background: rgb(131, 11, 11);
+}
+
+.slider-block h2, .slider-block p {
+    color: rgb(236, 92, 92);
+}
+
+.name-block {
+    background: rgba(138, 241, 69, 0.685);
+}
+
+.name-block h2, .name-block p {
+    color: rgb(56, 128, 8);
+}
+
+.white-block {
+    background-color: white;
+}
+
+body {
+    background-color: rgba(43, 226, 250, 0.493);
+}
+
+header {
+    /* background-color: rgba(43, 226, 250, 0.699); */
+    background-color: rgb(8, 83, 126);
+    color: rgba(75, 233, 245, 0.815);
+    padding: 20px;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.items-list {
+    /* padding: 20px; */
+    max-height: 300px;
+    overflow: auto;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+.top-item {
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.secondary-item {
+    font-weight: bold;
+    font-size: 20px;
+}
