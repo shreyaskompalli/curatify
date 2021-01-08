@@ -13,7 +13,7 @@ var recents_list, sliders_list;
 
 var clientId = 'f785c94c9cb64ee6954f436f39b0ee6c',
     clientSecret = 'b8bafe02839f4f6cb86bb02c73a6dad0',
-    redirectUri = 'http://localhost:8888/callback'
+    redirectUri = 'https://arcane-beach-91282.herokuapp.com/callback'
 
 /**
  * Generates a random string containing numbers and letters
