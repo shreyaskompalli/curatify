@@ -194,16 +194,6 @@
           return hashParams;
         }
 
-        
-
-        // var userProfileSource = document.getElementById('user-profile-template').innerHTML,
-        //     userProfileTemplate = Handlebars.compile(userProfileSource),
-        //     userProfilePlaceholder = document.getElementById('user-profile');
-
-        // var oauthSource = document.getElementById('oauth-template').innerHTML,
-        //     oauthTemplate = Handlebars.compile(oauthSource),
-        //     oauthPlaceholder = document.getElementById('oauth');
-
         var rpSource = document.getElementById('rp-template').innerHTML,
             rpTemplate = Handlebars.compile(rpSource),
             rpPlaceholder = document.getElementById('recently-played');
@@ -234,11 +224,6 @@
           alert('There was an error during the authentication');
         } else {
           if (access_token) {
-            // render oauth info
-            // oauthPlaceholder.innerHTML = oauthTemplate({
-            //   access_token: access_token,
-            //   refresh_token: refresh_token
-            // });
             $('#login').hide();
             $('#loggedin').show();
 

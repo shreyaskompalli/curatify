@@ -22,28 +22,28 @@ h1, #login p, .jumbotron p {
 }
 
 .rp-block {
-    background: rgb(196, 122, 13);
+    background: rgb(7, 122, 151);
 }
 
 .rp-block h2, .rp-block p {
-    color: rgb(250, 204, 135);
+    color: rgb(135, 217, 250);
     
 }
 
 .nt-block {
-    background: rgb(92, 13, 196);
+    background: rgb(9, 88, 31);
 }
 
 .nt-block h2, .nt-block p {
-    color: rgb(215, 150, 245);
+    color: rgb(150, 245, 178);
 }
 
 .slider-block {
-    background: rgb(131, 11, 11);
+    background: rgb(11, 131, 115);
 }
 
 .slider-block h2, .slider-block p {
-    color: rgb(236, 92, 92);
+    color: rgb(92, 236, 229);
 }
 
 .name-block {
