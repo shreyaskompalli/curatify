@@ -20,22 +20,26 @@
     </div>
     
     <div id="loggedin">
-      <div id="header-bar" class="sticky-top">
+      <div id="header-bar" class="fixed-top">
         <header>
           Curatify
         </header>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(8, 83, 126);">
+        <nav class="navbar navbar-expand-lg navbar-dark pt-sm-0" style="background-color: rgb(8, 83, 126);">
           <!-- <a class="navbar-brand" href="#">Navbar</a> -->
           <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home</a>
-            <a class="nav-item nav-link" href="#recents">Recently Played</a>
-            <a class="nav-item nav-link" href="#sliders">Sliders</a>
+            <a class="nav-item nav-link active" href="#homepage">Home</a>
+            <a class="nav-item nav-link" href="#recents-target">Recently Played</a>
+            <a class="nav-item nav-link" href="#sliders-target">Sliders</a>
             <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
           </div>
         </nav>
       </div>
-      <div class="container-fluid">
+      <div id="content" class="container-fluid">
+        <div id="homepage">
+          
+        </div>
         <div class="row my-3" id="recents">
+          <a id="recents-target">&nbsp;</a>
           <div class="col-sm-7">
             <div class="white-block">
               <div class="rp-block">
@@ -56,16 +60,22 @@
           </div>
         </div>
 
-        <div class="row my-3">
-          <div class="col-sm-5">
-            <div class="row">
-              <div class="col-sm-12">
-                <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-generate">Generate tracks!</button>
-                <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-create">Add these tracks to a new playlist!</button>
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-4">
+            <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-generate">Generate tracks!</button>
+            <small class="form-text text-muted">Generate a playlist based on your recently played tracks.</small>
           </div>
-          <div class="col-sm-7">
+          <div class="col-sm-4">
+            <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-create">Add these to a new playlist!</button>
+            <small class="form-text text-muted">Add these tracks to a new playlist on your Spotify account.</small>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8">
             <div class="white-block">
               <div class="nt-block">
                 <h2>A New Playlist</h2>
@@ -75,10 +85,13 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-2"></div>
         </div>
 
+       
         
-        <div class="row my-" id="sliders">
+        <div class="row my-3" id="sliders">
+          <a id="sliders-target">&nbsp;</a>
           <div class="col-sm-6">
             <div class="slider-block">
               <h2>Sliders Playlist</h2>
@@ -124,26 +137,20 @@
     </div>  
 
     <script id="rp-template" type="text/x-handlebars-template">
-      <dl class="items-list">
-        {{#each items}}
-          <dt>{{track.name}}</dt>
-          <dd><a href="{{track.external_urls.spotify}}">
-            {{track.external_urls.spotify}}
-          </a></dd>
-        {{/each}}
-      </dl>
+        <div class="items-list">
+          {{#each items}}
+            <iframe class="track-embed" src="{{embed-link track.external_urls.spotify}}" height="80" allowtransparency="true" allow="encrypted-media"></iframe>
+          {{/each}}
+        </div>
     </script>
       
 
     <script id="nt-template" type="text/x-handlebars-template">
-      <dl class="items-list">
+      <div class="items-list">
         {{#each tracks}}
-          <dt>{{name}}</dt>
-          <dd><a href="{{external_urls.spotify}}">
-            {{external_urls.spotify}}
-          </a></dd>
+          <iframe class="track-embed" src="{{embed-link external_urls.spotify}}" height="80" allowtransparency="true" allow="encrypted-media"></iframe>
         {{/each}}
-      </dl>
+      </div>
     </script>
 
     <script id="top-artists-template" type="text/x-handlebars-template">
@@ -167,16 +174,22 @@
       </div>
     </script>
 
-    <!-- <script id="oauth-template" type="text/x-handlebars-template">
-      <h2>oAuth info</h2>
-      <dl class="dl-horizontal">
-        <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
-        <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
-      </dl>
-    </script> -->
-
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+      $('div.navbar-nav a').bind('click',function(event){
+        event.preventDefault();
+        var $anchor = $(this);
+        console.log($anchor.attr('href'))
+        $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top
+        }, 1000);
+        event.preventDefault();
+      });
+      Handlebars.registerHelper('embed-link', function(url) {
+        return 'https://open.spotify.com/embed/track/' + url.slice(31);
+      });
+    </script>
     <script>
       (function() {
 
@@ -219,6 +232,8 @@
         var recs_list;
 
         var top_artists = "";
+
+        
 
         if (error) {
           alert('There was an error during the authentication');

@@ -1,6 +1,21 @@
 #login, #loggedin {
     display: none;
 }
+
+#homepage {
+    height: 800px;
+}
+
+#recents #recents-target, #sliders #sliders-target {
+    position: absolute;
+    left: 0px;
+    top: -165px;
+}
+
+#recents, #sliders {
+    position: relative;
+}
+
 .text-overflow {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -11,10 +26,6 @@ h1, #login p, .jumbotron p {
     text-align: center;
 }
 
-/* #loggedin {
-    background-color: rgba(43, 226, 250, 0.493);
-} */
-
 .rp-block, .nt-block, .slider-block, .name-block {
     padding-top: 5px;
     padding-left: 20px;
@@ -22,36 +33,39 @@ h1, #login p, .jumbotron p {
 }
 
 .rp-block {
-    background: rgb(7, 122, 151);
-}
-
-.rp-block h2, .rp-block p {
-    color: rgb(135, 217, 250);
-    
-}
-
-.nt-block {
     background: rgb(9, 88, 31);
 }
 
-.nt-block h2, .nt-block p {
+.rp-block dt {
+    color:beige;
+}
+
+.rp-block h2, .rp-block p {
     color: rgb(150, 245, 178);
+}
+
+.nt-block {
+    background: rgb(138, 241, 69);
+}
+
+.nt-block h2, .nt-block p, .nt-block dt {
+    color: rgb(38, 87, 5);
 }
 
 .slider-block {
     background: rgb(11, 131, 115);
 }
 
-.slider-block h2, .slider-block p {
+.slider-block h2, .slider-block p, .slider-block dt {
     color: rgb(92, 236, 229);
 }
 
 .name-block {
-    background: rgba(138, 241, 69, 0.685);
+    background: rgb(7, 122, 151);
 }
 
 .name-block h2, .name-block p {
-    color: rgb(56, 128, 8);
+    color: rgb(153, 242, 245);
 }
 
 .white-block {
@@ -63,11 +77,11 @@ body {
 }
 
 header {
-    /* background-color: rgba(43, 226, 250, 0.699); */
     background-color: rgb(8, 83, 126);
     color: rgba(75, 233, 245, 0.815);
-    padding: 20px;
-    font-size: 60px;
+    padding-left: 20px;
+    padding-bottom: 0px;
+    font-size: 70px;
     font-weight: bold;
 }
 
@@ -89,9 +103,16 @@ label {
 .top-item {
     font-weight: bold;
     font-size: 40px;
+    color: beige;
 }
 
 .secondary-item {
     font-weight: bold;
     font-size: 20px;
+    color:beige
+}
+
+.track-embed {
+    width: 95%;
+    align-self: center;
 }
