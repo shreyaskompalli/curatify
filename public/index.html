@@ -9,28 +9,30 @@
   </head>
 
   <body>
-    <div class="container">
-      <div id="login">
-        <h1 class="login-title">Welcome to Curatify</h1>
-        <p>This is a web-app that allows you to create custom playlists based on various characteristics. Log in to get started!</p>
-        <div class="col text-center">
-          <a href="/login" class="btn btn-primary btn-lg">Sign in with Spotify</a>
+    <div id="login">
+      
+      <div class="main-wrapper m-4">
+        <div class="login-block text-center">
+          <h1> Welcome to Curatify </h1>
+          <p>An app that lets you make your playlists your own.</p>
+          <a href="/login" class="btn btn-primary btn-lg" id="login-button">Log in to get started.</a>
         </div>
       </div>
     </div>
     
     <div id="loggedin">
       <div id="header-bar" class="fixed-top">
-        <header>
-          Curatify
-        </header>
-        <nav class="navbar navbar-expand-lg navbar-dark pt-sm-0" style="background-color: rgb(8, 83, 126);">
-          <!-- <a class="navbar-brand" href="#">Navbar</a> -->
-          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#homepage">Home</a>
-            <a class="nav-item nav-link" href="#recents-target">Recently Played</a>
-            <a class="nav-item nav-link" href="#sliders-target">Sliders</a>
-            <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+        <nav class="navbar navbar-expand-lg">
+          <a class="navbar-brand" href="#homepage">Curatify</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item mx-sm-1 nav-link" href="#recents-target">Recently Played</a>
+              <a class="nav-item mx-sm-1 nav-link" href="#sliders-target">Sliders</a>
+              <a class="nav-item mx-sm-1 nav-link" href="#statistics">Statistics</a>
+            </div>
           </div>
         </nav>
       </div>
@@ -63,12 +65,12 @@
         <div class="row">
           <div class="col-sm-2"></div>
           <div class="col-sm-4">
-            <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-generate">Generate tracks!</button>
-            <small class="form-text text-muted">Generate a playlist based on your recently played tracks.</small>
+            <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-generate">Generate tracks!</button>
+            <small class="button-text text-muted mt-1">Generate a playlist based on your recently played tracks.</small>
           </div>
           <div class="col-sm-4">
-            <button type="button" class="btn btn-primary btn-lg btn-block m-3" id="recents-create">Add these to a new playlist!</button>
-            <small class="form-text text-muted">Add these tracks to a new playlist on your Spotify account.</small>
+            <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-create">Add these to a new playlist!</button>
+            <small class="button-text text-muted mt-1">Add these tracks to a new playlist on your Spotify account.</small>
           </div>
           <div class="col-sm-2"></div>
         </div>
@@ -186,6 +188,24 @@
         }, 1000);
         event.preventDefault();
       });
+
+      $('navbar-brand a').bind('click',function(event){
+        event.preventDefault();
+        var $anchor = $(this);
+        console.log($anchor.attr('href'))
+        $('html, body').stop().animate({
+          scrollTop: $($anchor.attr('href')).offset().top
+        }, 1000);
+        event.preventDefault();
+      });
+
+      $('.nav a').click(function(e) {
+        $('.nav a.active').removeClass('active');
+        var $parent = $(this).parent();
+        $parent.addClass('active');
+        e.preventDefault();
+      });
+
       Handlebars.registerHelper('embed-link', function(url) {
         return 'https://open.spotify.com/embed/track/' + url.slice(31);
       });
@@ -232,8 +252,6 @@
         var recs_list;
 
         var top_artists = "";
-
-        
 
         if (error) {
           alert('There was an error during the authentication');
