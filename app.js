@@ -1,20 +1,13 @@
-/**
- * 
- */
-
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
+var express = require('express'); 
+var request = require('request'); 
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
-const { access } = require('fs');
 var recents_list, sliders_list;
 
 var clientId = 'f785c94c9cb64ee6954f436f39b0ee6c';
-var clientSecret = 'b8bafe02839f4f6cb86bb02c73a6dad0';
 var redirectUri = 'https://arcane-beach-91282.herokuapp.com/callback';
-// var redirectUri = 'http://localhost:8888/callback';
+// var redirectUri = 'http://localhost:8888';
 
 /**
  * Generates a random string containing numbers and letters
@@ -39,79 +32,18 @@ app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
 
-// app.get('/login', function(req, res) {
-//   var state = generateRandomString(16);
-//   res.cookie(stateKey, state);
-//   var spotifyApi = new SpotifyWebApi({
-//     clientId: 'f785c94c9cb64ee6954f436f39b0ee6c',
-//     redirectUri: 'http://localhost:8888/callback'
-//   });
-//   var scopes = ['user-read-private', 'user-read-email', 'user-read-recently-played', 'playlist-modify-public'];
-//   var authURL = spotifyApi.createAuthorizeURL(scopes, state, true, 'token');
-
-//   // your application requests authorization
-//   res.redirect(authURL);
-// });
-
 app.get('/login', function(req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
-
-  // your application requests authorization
   var scope = 'user-read-private user-read-email user-read-recently-played playlist-modify-public user-top-read';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
-      response_type: 'code',
+      response_type: 'token',
       client_id: clientId,
       scope: scope,
       redirect_uri: redirectUri,
       state: state
     }));
-});
-
-app.get('/callback', function(req, res) {
-  var code = req.query.code || null;
-  var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
-
-  if (state === null || state !== storedState) {
-    res.redirect('/#' +
-      querystring.stringify({
-        error: 'state_mismatch'
-      }));
-  } else {
-    res.clearCookie(stateKey);
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: redirectUri,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64'))
-      },
-      json: true
-    };
-  }
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token,
-          refresh_token = body.refresh_token;
-      res.redirect('/#' +
-        querystring.stringify({
-          access_token: access_token,
-          refresh_token: refresh_token
-        })
-      );
-    } else {
-      res.redirect('/#' +
-        querystring.stringify({
-          error: 'invalid_token'
-        }));
-    }
-  });
 });
 
 app.get('/generate', function(req, res) {
@@ -122,14 +54,16 @@ app.get('/generate', function(req, res) {
     json: true
   };
 
-  // use the access token to access the Spotify Web API
-  request.get(options, function(error, response, body) {    // TODO: Error handling 
-    var i;
-    let history = [];
-    for (i = 0; i < body.items.length; i++) {
-      history.push(body.items[i].track);
+  request.get(options, function(error, response, body) { 
+    if (!error && response.statusCode === 200)  {
+      let history = [];
+      for (var i = 0; i < body.items.length; i++) {
+        history.push(body.items[i].track);
+      }
+      buildRecents(history, access_token, res);
+    } else {
+      res.status(response.statusCode).send({error: "authentication error"});
     }
-    buildRecents(history, access_token, res);
   });
 });
 
@@ -138,17 +72,16 @@ app.get('/create', function(req, res) {
     if (recents_list) {
       createPlaylist(recents_list, req.query.access_token, res);
     } else {
-      // Error handling, alert 
+      res.status(503).send({error: 'recents track list is empty'});
     }
   } else if (req.query.type === 'sliders') {
     if (sliders_list) {
-      createPlaylist(recents_list, req.query.access_token, res);
+      createPlaylist(sliders_list, req.query.access_token, res);
     } else {
-      // Error handling, alert 
+      res.status(503).send({error: 'sliders track list is empty'});
     }
   } else {
-      // Error Handling
-      console.log("creation failure");
+    res.status(503).send({error: 'playlist creation type does not exist'});
   }
 });
 
@@ -160,38 +93,11 @@ app.get('/sliders', function(req, res) {
       target_danceability: req.query.danceability/100,
       target_energy: req.query.energy/100,
       target_loudness: req.query.loudness/100,
-      // target_speechiness: (speechiness/num_tracks).toPrecision(3),
       target_acousticness: req.query.acousticness/100,
       target_instrumentalness: req.query.instrumentalness/100,
-      // target_liveliness: (liveliness/num_tracks).toPrecision(3),
       target_valence: req.query.valence/100,
-      // target_tempo: (tempo/num_tracks).toPrecision(3)
     });
     getRecommendations(rec_url, req.query.access_token, res, 'sliders');
-});
-
-app.get('/refresh_token', function(req, res) {
-
-  // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      res.send({
-        'access_token': access_token
-      });
-    }
-  });
 });
 
 function buildRecents(history, access_token, res) {
@@ -201,7 +107,6 @@ function buildRecents(history, access_token, res) {
       instrumentalness = 0, liveliness = 0, valence = 0, tempo = 0;
   var all_artists = new Map();
   
-  // Create ID list, populate artists map
   for (var i = 0; i < history.length; i++) {
     ids += history[i].id + ",";
     for (var artist of history[i].artists) {
@@ -214,7 +119,6 @@ function buildRecents(history, access_token, res) {
   }
   ids = ids.slice(0, ids.length - 1);
 
-  // Setting seed artists
   for (var i = 0; i < 3; i++) {
     let artist = mapMaxValue(all_artists);
     seed_artists += artist + ',';
@@ -222,7 +126,6 @@ function buildRecents(history, access_token, res) {
   }
   seed_artists = seed_artists.slice(0, seed_artists.length - 1);
   
-  // Getting cumulative audio features
   let feature_options = {
     url: 'https://api.spotify.com/v1/audio-features?ids=' + ids,
     headers: { 'Authorization': 'Bearer ' + access_token },
@@ -244,7 +147,6 @@ function buildRecents(history, access_token, res) {
         }
       }
 
-      // Running recommendation engine
       var rec_url = 'https://api.spotify.com/v1/recommendations?'
       + querystring.stringify({
         seed_artists: seed_artists,
@@ -261,11 +163,7 @@ function buildRecents(history, access_token, res) {
       });
       getRecommendations(rec_url, access_token, res, 'recents');
     } else {
-
-
-      // Error Handling
-
-
+      res.status(response.statusCode).send({error: "audio features error"});
     }
   });
 }
@@ -283,26 +181,16 @@ function getRecommendations(url, access_token, res, rec_type) {
       } else if (rec_type === 'sliders') {
         sliders_list = rec_body.tracks;
       }
-      //console.log(rec_body.tracks);
-      console.log("hello");
       res.send({
         'track_list': rec_body.tracks
       });
     } else {
-      console.log("recommendation failure");
-      console.log(response.statusCode);
-      // Error handling
+      res.status(response.statusCode).send({error: "recommendations error"});
     }
   });
 }
 
 function createPlaylist(tracks, access_token, res) {
-  var user_id;
-  // var uris = "";
-  // for (var i = 0; i < tracks.length; i++) {
-  //   uris += tracks[i].uri + ",";
-  // }
-  // uris = uris.slice(0, uris.length-1);
   let user_options = {
     url: 'https://api.spotify.com/v1/me',
     headers: { 'Authorization': 'Bearer ' + access_token },
@@ -310,10 +198,8 @@ function createPlaylist(tracks, access_token, res) {
   };
   request.get(user_options, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      user_id = body.id;
-      //console.log(user_id);
       let create_options = {
-        url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists',
+        url: 'https://api.spotify.com/v1/users/' + body.id + '/playlists',
         headers: { 
           'Authorization': 'Bearer ' + access_token, 
           'Content-Type': 'application/json'
@@ -338,29 +224,18 @@ function createPlaylist(tracks, access_token, res) {
             json: true
           };
           request.post(add_options, function(error, response, body) {
-            if (!error && response.statusCode === 201) {
-              console.log(body);
+            if (!error && response.statusCode === 200) {
+              res.status(200).send({success: "playlist created"});
             } else {
-              console.log('failure1');
-              // Error handling
+              res.status(response.statusCode).send({error: "adding tracks error"});
             }
           });
         } else {
-          
-          console.log('failure2');
-          // Error Handling
-
-
+          res.status(response.statusCode).send({error: "creating playlist error"});
         }
       });
     } else {
-
-      console.log('failure3');
-      console.log(response.statusCode);
-      
-      // Error Handling
-
-
+      res.status(response.statusCode).send({error: "user data error"});
     }
   });
 }
@@ -374,5 +249,5 @@ function mapMaxValue(map) {
 }
 
 app.set('port', process.env.PORT || 8888);
-console.log('Listening on 8888');
+console.log('Listening on ' + app.get('port'));
 app.listen(app.get('port'));

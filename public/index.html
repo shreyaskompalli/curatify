@@ -10,7 +10,6 @@
 
   <body>
     <div id="login">
-      
       <div class="main-wrapper m-4">
         <div class="login-block text-center">
           <h1> Welcome to Curatify </h1>
@@ -21,24 +20,33 @@
     </div>
     
     <div id="loggedin">
-      <div id="header-bar" class="fixed-top">
-        <nav class="navbar navbar-expand-lg">
-          <a class="navbar-brand" href="#homepage">Curatify</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item mx-sm-1 nav-link" href="#recents-target">Recently Played</a>
-              <a class="nav-item mx-sm-1 nav-link" href="#sliders-target">Sliders</a>
-              <a class="nav-item mx-sm-1 nav-link" href="#statistics">Statistics</a>
+      <div class="row mb-3 sticky-top">
+        <div class="col-sm-12">
+          <nav class="navbar sticky-top navbar-expand-lg">
+            <a class="navbar-brand" href="#homepage-target">Curatify</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item mx-sm-1 nav-link" href="#recents-target">Recently Played</a>
+                <a class="nav-item mx-sm-1 nav-link" href="#sliders-target">Sliders</a>
+                <!-- <a class="nav-item mx-sm-1 nav-link" href="#statistics">Statistics</a> -->
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        </div>
       </div>
       <div id="content" class="container-fluid">
-        <div id="homepage">
-          
+        <div class="row my-3" id="homepage">
+          <a id="homepage-target">&nbsp;</a>
+          <div class="col-sm-12">
+            <div class="home-block">
+              <h1 class="my-3"> Generate new playlists with the click of a button. </h1>
+              <h2> Then, listen straight from this page -- or, if you prefer your music to-go, 
+              add them to a new Spotify playlist instantly. </h2>
+            </div>
+          </div>
         </div>
         <div class="row my-3" id="recents">
           <a id="recents-target">&nbsp;</a>
@@ -69,7 +77,7 @@
             <small class="button-text text-muted mt-1">Generate a playlist based on your recently played tracks.</small>
           </div>
           <div class="col-sm-4">
-            <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-create">Add these to a new playlist!</button>
+            <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-create">Add to a new playlist!</button>
             <small class="button-text text-muted mt-1">Add these tracks to a new playlist on your Spotify account.</small>
           </div>
           <div class="col-sm-2"></div>
@@ -90,8 +98,6 @@
           <div class="col-sm-2"></div>
         </div>
 
-       
-        
         <div class="row my-3" id="sliders">
           <a id="sliders-target">&nbsp;</a>
           <div class="col-sm-6">
@@ -129,8 +135,10 @@
                     <small class="form-text text-muted">Electric guitars or all-natural sounds?</small>
                   </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate tracks!</button>
-                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Create Playlist!</button>
+                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate Tracks!</button>
+                <small class="button-text text-muted mt-1">Generate a playlist based on your selected attributes.</small>
+                <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Add to a new Playlist!</button>
+                <small class="button-text text-muted mt-1">Add these tracks to a new playlist on your Spotify account.</small>
               </form>
             </div>
           </div>
@@ -161,9 +169,9 @@
           <ul class="items-list">
             {{#each items}}
               {{#if @index}}
-                <li class="secondary-item">{{name}}</li>
+                <li class="secondary-item my-2">{{name}}</li>
               {{else}}
-                <li class="top-item">{{name}}</li>
+                <li class="top-item mb-2 mt-0">{{name}}</li>
               {{/if}}
             {{/each}}
           </ul>
@@ -182,17 +190,15 @@
       $('div.navbar-nav a').bind('click',function(event){
         event.preventDefault();
         var $anchor = $(this);
-        console.log($anchor.attr('href'))
         $('html, body').stop().animate({
           scrollTop: $($anchor.attr('href')).offset().top
         }, 1000);
         event.preventDefault();
       });
 
-      $('navbar-brand a').bind('click',function(event){
+      $('a.navbar-brand').bind('click',function(event){
         event.preventDefault();
         var $anchor = $(this);
-        console.log($anchor.attr('href'))
         $('html, body').stop().animate({
           scrollTop: $($anchor.attr('href')).offset().top
         }, 1000);
@@ -270,6 +276,9 @@
 
                   $('#login').hide();
                   $('#loggedin').show();
+                },
+                error: function(response) {
+                  alert("Something went wrong! Please refresh, sign in, and try again.");
                 }
             });
 
@@ -284,11 +293,12 @@
                     top_artists += artist.id + ",";
                   }
                   top_artists = top_artists.slice(0, top_artists.length - 1);
-                  console.log(response.items[0].images[0].url);
+                },
+                error: function(response) {
+                  alert("Something went wrong! Please refresh, sign in, and try again.");
                 }
             });
           } else {
-              // render initial screen
               $('#login').show();
               $('#loggedin').hide();
           }
@@ -298,17 +308,19 @@
               url: '/generate',
               data: {
                 'access_token': access_token
+              },
+              success: function(data) {
+                ntPlaceholder.innerHTML = ntTemplate({
+                  tracks: data.track_list
+                });
+              },
+              error: function(data) {
+                alert("There was a(n)" + data.error + ". Sorry about that! Please refresh the page and try again.");
               }
-            }).done(function(data) {
-              ntPlaceholder.innerHTML = ntTemplate({
-                tracks: data.track_list
-              });
-              recs_list = data.track_list;
             });
           }, false);
 
           document.getElementById('sliders-generate').addEventListener('click', function() {
-            
             $.ajax({
               url: '/sliders',
               data: {
@@ -320,11 +332,15 @@
                 'loudness': document.getElementById('loudness').value,
                 'instrumentalness': document.getElementById('instrumentalness').value,
                 'valence': document.getElementById('valence').value,
+              },
+              success: function(data) {
+                sliderPlaceholder.innerHTML = sliderTemplate({
+                  tracks: data.track_list
+                });
+              },
+              error: function(data) {
+                alert("There was a(n)" + data.error + ". Sorry about that! Please refresh the page and try again.");
               }
-            }).done(function(data) {
-              sliderPlaceholder.innerHTML = sliderTemplate({
-                tracks: data.track_list
-              });
             });
           }, false);
 
@@ -334,6 +350,12 @@
               data: {
                 'access_token': access_token,
                 'type': 'recents'
+              },
+              success: function(data) {
+                alert("Playlist created! Check your Spotify account.");
+              },
+              error: function(data) {
+                alert("You have not generated any tracks yet!");
               }
             });
           }, false);
@@ -344,6 +366,12 @@
               data: {
                 'access_token': access_token,
                 'type': 'sliders'
+              },
+              success: function(data) {
+                alert("Playlist created! Check your Spotify account.");
+              },
+              error: function(data) {
+                alert("You have not generated any tracks yet!");
               }
             });
           }, false);
