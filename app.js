@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var recents_list, sliders_list;
 
 var clientId = 'f785c94c9cb64ee6954f436f39b0ee6c';
-var redirectUri = 'https://arcane-beach-91282.herokuapp.com/callback';
+var redirectUri = 'https://arcane-beach-91282.herokuapp.com';
 // var redirectUri = 'http://localhost:8888';
 
 /**
