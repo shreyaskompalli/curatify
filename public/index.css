@@ -23,8 +23,8 @@
     height: 100vh;
 }
 
-body {
-    background-color: rgba(43, 226, 250, 0.493);
+body, .navbar {
+    background-color: rgb(114, 16, 16);
 }
 
 .login-block {
@@ -64,13 +64,13 @@ body {
 }
 
 .home-block {
-    background-color: rgb(17, 68, 53);
+    background-color: rgb(251, 131, 111);
     text-align: center;
     padding: 15% 0;
 }
 
 .home-block h1, .home-block h2 {
-    color: rgb(104, 175, 241);
+    color: rgb(224, 44, 12);
     margin: 20px;
 }
 
@@ -80,19 +80,19 @@ body {
 }
 
 .rp-block {
-    background: rgb(9, 88, 31);
+    background: rgb(255, 203, 62);
 }
 
 .rp-block h2, .rp-block p {
-    color: rgb(150, 245, 178);
+    color: rgb(114, 16, 16);
 }
 
 .nt-block {
-    background: rgb(138, 241, 69);
+    background: rgb(251, 131, 111);
 }
 
 .nt-block h2, .nt-block p {
-    color: rgb(38, 87, 5);
+    color: rgb(224, 44, 12);
 }
 
 .slider-block {
@@ -104,11 +104,11 @@ body {
 }
 
 .name-block {
-    background: rgb(7, 122, 151);
+    background: rgb(255, 203, 62);
 }
 
 .name-block h2, .name-block p {
-    color: rgb(153, 242, 245);
+    color: rgb(114, 16, 16);
 }
 
 .white-block {
@@ -116,7 +116,7 @@ body {
 }
 
 .btn {
-    background-color: rgb(8, 83, 126);
+    background-color: rgba(180, 30, 240, 0.596);
     color: white;
 }
 
@@ -155,20 +155,16 @@ label {
     align-self: center;
 }
 
-.navbar { 
-    background-color: rgb(8, 83, 126);
-} 
-
 .navbar-brand {
     font-weight: bold;
     font-size: 50px;
-    color: rgb(138, 241, 69);
+    color: rgb(224, 129, 129);
 }
 
 .nav-item { 
     font-weight: bold;
     font-size: 20px;
-    color: rgba(75, 233, 245, 0.815);
+    color: rgb(199, 93, 93);
 } 
 
 .nav-item:hover {
