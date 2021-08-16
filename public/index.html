@@ -49,53 +49,57 @@
         </div>
         <div class="row my-3" id="recents">
           <a id="recents-target">&nbsp;</a>
-          <div class="col-sm-7">
-            <div class="white-block">
-              <div class="rp-block">
-                <h2>Your Recently Played Songs</h2>
-                <p>The tracks that you've been listening to lately.</p>
-                <div id="recently-played">
-                </div>
+          <div class="col-sm-6">
+            <div class="rp-block">
+              <h2>Your Recently Played Songs</h2>
+              <p>The tracks that you've been listening to lately.</p>
+              <div id="recently-played">
               </div>
             </div>
           </div>
-          <div class="col-sm-5">
+          <div class="col-sm-6">
+            <div class="nt-block">
+              <h2>A New Playlist</h2>
+              <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
+              <div id="new-tracks">
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-sm-5">
             <div class="name-block">
               <h2>Your top artists</h2>
               <p>The artists you've had on repeat for the past month.</p>
               <div id="top-artists">
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="row">
           <div class="col-sm-2"></div>
           <div class="col-sm-4">
             <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-generate">Generate tracks!</button>
-            <small class="button-text text-muted mt-1">Generate a playlist based on your recently played tracks.</small>
+            <small class="button-text mt-1">Generate a playlist based on your recently played tracks.</small>
           </div>
           <div class="col-sm-4">
             <button type="button" class="btn btn-primary btn-lg btn-block mt-2" id="recents-create">Add to a new playlist!</button>
-            <small class="button-text text-muted mt-1">Add these tracks to a new playlist on your Spotify account.</small>
+            <small class="button-text mt-1">Add these tracks to a new playlist on your Spotify account.</small>
           </div>
           <div class="col-sm-2"></div>
         </div>
 
-        <div class="row my-3">
+        <!-- <div class="row my-3">
           <div class="col-sm-2"></div>
           <div class="col-sm-8">
-            <div class="white-block">
-              <div class="nt-block">
-                <h2>A New Playlist</h2>
-                <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
-                <div id="new-tracks">
-                </div>
+            <div class="nt-block">
+              <h2>A New Playlist</h2>
+              <p>Some new tracks that you might enjoy, based on what you've recently played.</p>
+              <div id="new-tracks">
               </div>
             </div>
           </div>
           <div class="col-sm-2"></div>
-        </div>
+        </div> -->
 
         <div class="row my-3" id="sliders">
           <a id="sliders-target">&nbsp;</a>
@@ -114,30 +118,30 @@
                   <div class="col-sm-6">
                     <label for="danceability">Danceability</label>
                     <input type="range" class="form-control-range" id="danceability">
-                    <small class="form-text text-muted">In a groovy mood?</small>
+                    <small class="form-text">In a groovy mood?</small>
                     <label for="valence">Valence</label>
                     <input type="range" class="form-control-range" id="valence">
-                    <small class="form-text text-muted">Slide up for happy tunes, or down for a somber vibe.</small>
+                    <small class="form-text">Slide up for happy tunes, or down for a somber vibe.</small>
                     <label for="instrumentalness">Instrumentalness</label>
                     <input type="range" class="form-control-range" id="instrumentalness">
-                    <small class="form-text text-muted">Do you prefer singing, or just an instrumental melody?</small>
+                    <small class="form-text">Do you prefer vocals, or just an instrumental?</small>
                   </div>
                   <div class="col-sm-6">
                     <label for="energy">Energy</label>
                     <input type="range" class="form-control-range" id="energy">
-                    <small class="form-text text-muted">How intense are you feeling?</small>
+                    <small class="form-text">How intense are you feeling?</small>
                     <label for="loudness">Loudness</label>
                     <input type="range" class="form-control-range" id="loudness">
-                    <small class="form-text text-muted">This one's pretty straightforward.</small>
+                    <small class="form-text">This one's pretty straightforward.</small>
                     <label for="acousticness">Acousticness</label>
                     <input type="range" class="form-control-range" id="acousticness">
-                    <small class="form-text text-muted">Electric guitars or all-natural sounds?</small>
+                    <small class="form-text">Electric guitars or all-natural sounds?</small>
                   </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-generate">Generate Tracks!</button>
-                <small class="button-text text-muted mt-1">Generate a playlist based on your selected attributes.</small>
+                <small class="button-text mt-1">Generate a playlist based on your selected attributes.</small>
                 <button type="button" class="btn btn-primary btn-block btn-lg mt-3" id="sliders-create">Add to a new Playlist!</button>
-                <small class="button-text text-muted mt-1">Add these tracks to a new playlist on your Spotify account.</small>
+                <small class="button-text mt-1">Add these tracks to a new playlist on your Spotify account.</small>
               </form>
             </div>
           </div>
@@ -184,7 +188,7 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script>
       $('div.navbar-nav a').bind('click',function(event){
         event.preventDefault();
