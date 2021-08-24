@@ -41,7 +41,7 @@ body, .navbar {
 }
 
 .login-block h1 {
-    color: rgb(138, 241, 69);
+    color: #00daff;
     padding-top: 20%;
     font-size: 50%;
     font-weight: bold;
@@ -49,20 +49,21 @@ body, .navbar {
 }
 
 .login-block p {
-    color: rgb(138, 241, 69);    
+    color: rgb(166, 242, 255);  
     text-align: center;
     font-size: 20%;
 }
 
 #login-button {
-    background-color: rgb(75, 136, 35);
-    border-color: transparent;
-
+    border-color: #00daff;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 3px;
 }
 
 #login-button:hover {
-    background-color: rgb(138, 241, 69);  
-    color: rgb(75, 136, 35);
+    background-color: #00daff;
+    color: black;
 }
 
 /* GENERAL BLOCK STYLINGS */
@@ -70,23 +71,31 @@ body, .navbar {
     padding-top: 5px;
     padding-left: 20px;
     min-height: 500px;
-}
-
-.rp-block, .nt-block, .slider-block, .name-block {
     border-style: solid;
     border-radius: 20px;
     border-width: 6px;
+    border-color: #00daff;
+}
+
+.rp-block h2, .rp-block p, .nt-block h2, .nt-block p, .slider-block h2, .slider-block p, .name-block h2, .name-block p {
+    color: rgb(166, 242, 255);
+}
+
+.rp-block:hover, .nt-block:hover, .slider-block:hover, .name-block:hover {
+    background-color: #00daff;
+}
+
+.rp-block:hover h2, .rp-block:hover p, .nt-block:hover h2, .nt-block:hover p, .slider-block:hover h2, .slider-block:hover p, .name-block:hover h2, .name-block:hover p{
+    color: black;
 }
 
 /* HOME BLOCK STYLINGS */
 .home-block {
     text-align: center;
     padding: 20% 10%;
-    border-color: rgb(178, 144, 32);
 }
 
 .home-block h1, .home-block h2 {
-    color: rgb(224, 44, 12);
     margin: 20px;
     animation: fadeIn 1.5s;
     -webkit-animation: fadeIn 1.5s;
@@ -98,58 +107,51 @@ body, .navbar {
 .home-block h1 {
     font-size: 60px;
     font-weight: bold;
+    color: #00daff
+}
+
+.home-block h2 {
+    color: rgb(166, 242, 255);
 }
 
 /* RECENTLY PLAYED STYLINGS */
-.rp-block {
-    border-color: #caa533;
+/* .rp-block {
 }
 
 .rp-block h2, .rp-block p {
-    color: #f1e28d;
 }
 
 .rp-block:hover {
-    background-color: #caa533;
 }
 
 .rp-block:hover h2, .rp-block:hover p{
-    color: black;
-}
+} */
 
 /* NEW TRACK STYLINGS */
-.nt-block {
-    border-color: #00A0B0;
+/* .nt-block {
 }
 
 .nt-block h2, .nt-block p {
-    color: rgb(187, 236, 233);
 }
 
 .nt-block:hover {
-    background-color: #00A0B0;
 }
 
 .nt-block:hover h2, .nt-block:hover p {
-    color: black;
-}
+} */
 
 /* SLIDER STYLINGS */
-.slider-block {
-    border-color: rgb(66, 189, 9);
+/* .slider-block {
 }
 
 .slider-block h2, .slider-block p {
-    color: rgb(148, 194, 127);
 }
 
 .slider-block:hover {
-    background-color: rgb(66, 189, 9);
 }
 
 .slider-block:hover h2, .slider-block:hover p {
-    color: black
-}
+} */
 
 /* .name-block {
     border-color: rgb(255, 203, 62);
@@ -162,23 +164,24 @@ body, .navbar {
 /* BUTTON STYLINGS */
 .btn {
     background-color: transparent;
-    color: white;
-    border-color: rgb(247, 93, 66);
+    color: rgb(166, 242, 255); 
+    border-color: #00daff;
     border-style: solid;
     border-width: 4px;
 }
 
 .btn:hover {
-    background-color: rgb(247, 93, 66);
+    background-color: #00daff;
     color: black;
-    border-color: rgb(247, 93, 66);
+    border-color: #00daff;
     border-style: solid;
     border-width: 4px;
 }
 
 .btn:focus {
     background-color: unset;
-    border-color: rgb(247, 93, 66);
+    border-color: #00daff;
+    color: rgb(166, 242, 255);
     border-style: solid;
     border-width: 4px;
 }
@@ -186,17 +189,17 @@ body, .navbar {
 .button-text {
     display: block;
     text-align: center;
-    color: rgb(199, 192, 192);
+    color: rgb(166, 242, 255);
 }
 
 .form-text {
-    color: rgb(199, 192, 192);
+    color: rgb(166, 242, 255);
     padding-bottom: 10px;
 }
 
 label {
     font-weight: bold;
-    color: rgb(233, 179, 148);
+    color: rgb(166, 242, 255);
 }
 
 .items-list {
@@ -229,13 +232,13 @@ ul {
 .navbar-brand {
     font-weight: bold;
     font-size: 50px;
-    color: rgb(228, 102, 80);
+    color: rgb(0, 218, 255);
 }
 
 .nav-item { 
     font-weight: bold;
     font-size: 20px;
-    color: rgb(221, 144, 144);
+    color: rgb(166, 242, 255);
 } 
 
 .nav-item:hover {
